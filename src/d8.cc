@@ -1534,18 +1534,17 @@ void SourceGroup::Execute(Isolate* isolate) {
     Local<String> file_name =
         String::NewFromUtf8(isolate, arg, NewStringType::kNormal)
             .ToLocalChecked();
-    while (__AFL_LOOP(1000)) {
-      Local<String> source = ReadFile(isolate, arg);
-      if (source.IsEmpty()) {
-        printf("Error reading '%s'\n", arg);
-        Shell::Exit(1);
-      }
-      Shell::options.script_executed = true;
-      if (!Shell::ExecuteString(isolate, source, file_name, false, true,
-                                source_type)) {
-        exception_was_thrown = true;
-        break;
-      }
+    __AFL_INIT();
+    Local<String> source = ReadFile(isolate, arg);
+    if (source.IsEmpty()) {
+      printf("Error reading '%s'\n", arg);
+      Shell::Exit(1);
+    }
+    Shell::options.script_executed = true;
+    if (!Shell::ExecuteString(isolate, source, file_name, false, true,
+                              source_type)) {
+      exception_was_thrown = true;
+      break;
     }
   }
   if (exception_was_thrown != Shell::options.expected_to_throw) {
