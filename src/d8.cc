@@ -1546,6 +1546,7 @@ void SourceGroup::Execute(Isolate* isolate) {
       exception_was_thrown = true;
       break;
     }
+    break;
   }
   if (exception_was_thrown != Shell::options.expected_to_throw) {
     Shell::Exit(1);
